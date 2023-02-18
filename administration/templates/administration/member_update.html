@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            var value = $('option:selected', '#role').val()
+            if (value === 'project_manager'){
+                    $('#ticket_flow').hide();
+                }
+            $('#role').on('change', function (e) {
+                e.preventDefault();
+                var value = $('option:selected', '#role').val()
+                if (value === 'project_manager'){
+                    $('#ticket_flow').fadeOut();
+                } else{
+                    $('#ticket_flow').fadeIn();
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}
+
+{% block content %}
+
+<section class="text-gray-600 body-font overflow-hidden">
+  <div class="container mx-auto">
+    <div class="lg:w-4/5 mx-auto flex flex-wrap">
+      <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 max-w-lg mx-auto">
+        <h2 class="text-sm title-font text-gray-500 tracking-widest">MEMBER</h2>
+        <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">{{ member.username }}</h1>
+        <div class="flex mb-4">
+          <a href="{% url 'administration:member-detail' member.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
+              Overview
+          </a>
+          <a href="{% url 'administration:member-update' member.pk %}" class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">
+              Update Details
+          </a>
+        </div>
+          <form method="post">
+              {% csrf_token %}
+              <div class="row">
+                  <div class="col-6">
+                    {{ form.username|as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.first_name|as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.last_name|as_crispy_field }}
+                  </div>
+                  <div class="col-6">
+                    {{ form.email|as_crispy_field }}
+                  </div>
+                  <div class="col-6" id="role">
+                    {{ form.role|as_crispy_field }}
+                  </div>
+                  {% if form.ticket_flow %}
+                    <div class="col-6" id="ticket_flow">
+                        <div id="div_id_ticket_flow" class="col-6 mb-3">
+                            <label for="id_ticket_flow" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Ticket flow</label>
+                            <select multiple name="ticket_flow" id="id_ticket_flow" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5">
+                                {% for project in form.ticket_flow %}
+                                    {{ project }}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                  {% endif %}
+              </div>
+
+              <button type="submit" class="w-full text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-2 rounded-md">Submit</button>
+          </form>
+        {% if request.user.is_organizer %}
+            <div class="mt-5 py-5 border-t border-gray-200">
+                <a href="{% url 'administration:member-delete' member.pk %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                    Delete
+                </a>
+            </div>
+          {% else %}
+            <div class="mt-5 py-5 border-t border-gray-200">
+                <a href="{% url 'administration:member-request-delete' member.pk %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                    Request Delete
+                </a>
+            </div>
+          {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

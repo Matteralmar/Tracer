@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <a class="hover:text-blue-400" href="{% url 'tickets:type-list' %}">Go back to types</a>
+    <hr/>
+    <div class="py-5 border-5 border-gray-200">
+        <h1 class="text-4xl test-gray-800">Create a new type</h1>
+    </div>
+    <form method="post" class="mt-5">
+        {% csrf_token %}
+        <div id="div_id_name" class="mb-1"> <label for="id_name" class="block text-gray-700 text-sm font-bold mb-2">
+            Name<span class="asteriskField">*</span> </label> <input type="text" name="name" maxlength="30" class="textinput border-gray-300 block px-4 text-gray-700 rounded-lg py-2 appearance-none leading-normal bg-white w-full border focus:outline-none" required id="id_name"> </div>
+
+        <input type="color" class="form-control form-control-color" name="CI" id="exampleColorInput" value="#563d7c" title="Choose your color">
+        <button type="submit" class="flex ml-auto mb-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock content %}

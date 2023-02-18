@@ -1,0 +1,347 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--Chart js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <title>Tracer</title>
+
+</head>
+<body class="bg-slate-100">
+    {% block scripts %}
+<script>
+$(document).ready(function(){
+    const sts = document.getElementById('statusChart').getContext('2d');
+    const statusChart = new Chart(sts, {
+        type: 'pie',
+        data: {
+            labels: [{% for status in statuses %}'{{status.name}}',{% endfor %}],
+            datasets: [{
+                label: '# of Votes',
+                data: [{% for status in count_statuses %}'{{status.total}}',{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 127, 3, 0.2)',
+                    'rgba(78,255,60,0.2)',
+                    'rgba(203,9,238,0.2)',
+                    'rgba(253,0,97,0.2)',
+                    'rgba(199,255,11,0.2)',
+                    'rgba(122,0,189,0.2)',
+                    'rgba(140,182,232,0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(78,255,60,1)',
+                    'rgba(203,9,238,1)',
+                    'rgba(253,0,97,1)',
+                    'rgba(199,255,11,1)',
+                    'rgba(122,0,189,1)',
+                    'rgba(140,182,232,1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const prt = document.getElementById('priorityChart').getContext('2d');
+    const priorityChart = new Chart(prt, {
+        type: 'pie',
+        data: {
+            labels: [{% for priority in priorities %}'{{priority.name}}',{% endfor %}],
+            datasets: [{
+                label: '# of Votes',
+                data: [{% for priority in count_priorities %}'{{priority.total}}',{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(78,255,60,0.2)',
+                    'rgba(203,9,238,0.2)',
+                    'rgba(253,0,97,0.2)',
+                    'rgba(199,255,11,0.2)',
+                    'rgba(122,0,189,0.2)',
+                    'rgba(140,182,232,0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(78,255,60,1)',
+                    'rgba(203,9,238,1)',
+                    'rgba(253,0,97,1)',
+                    'rgba(199,255,11,1)',
+                    'rgba(122,0,189,1)',
+                    'rgba(140,182,232,1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const tp = document.getElementById('typeChart').getContext('2d');
+    const typeChart = new Chart(tp, {
+        type: 'pie',
+        data: {
+            labels: [{% for type in types %}'{{type.name}}',{% endfor %}],
+            datasets: [{
+                label: '# of Votes',
+                data: [{% for type in count_types %}'{{type.total}}',{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(78,255,60,0.2)',
+                    'rgba(203,9,238,0.2)',
+                    'rgba(253,0,97,0.2)',
+                    'rgba(199,255,11,0.2)',
+                    'rgba(122,0,189,0.2)',
+                    'rgba(140,182,232,0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(78,255,60,1)',
+                    'rgba(203,9,238,1)',
+                    'rgba(253,0,97,1)',
+                    'rgba(199,255,11,1)',
+                    'rgba(122,0,189,1)',
+                    'rgba(140,182,232,1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    $("#filter").keyup(function(){
+
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val();
+
+        // Loop through the comment list
+        $("tbody tr").each(function(){
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).fadeOut();
+
+            // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show();
+            }
+        });
+
+    });
+
+
+
+});
+
+</script>
+{% endblock scripts %}
+    <div class="max-w-7xl mx-auto">
+        {% include 'navbar.html' %}
+
+{% block content %}
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto flex flex-wrap">
+      <div class="w-full flex justify-between items-center border-b border-gray-200">
+          <div>
+              <h1 class="text-4xl text-gray-800">Projects</h1>
+          </div>
+          {% if request.user.is_organizer %}
+          <div>{% if request.user.is_organizer %}
+              <a class="text-gray-500 hover:text-blue-400" href="{% url 'dashboard:project-create' %}">Create a new project</a>
+              {% endif %}
+          </div>
+          {% endif %}
+      </div>
+      <div class="flex w-full md:justify-start justify-center items-end">
+        <div class="relative mr-4 w-4/7">
+          <label for="filter" class="leading-7 text-sm text-gray-600">Filter</label>
+          <input type="text" id="filter" name="filter" class="mb-1 w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-white focus:border-indigo-500 text-base outline-none text-gray-700 px-3 leading-8 transition-colors duration-200 ease-in-out">
+        </div>
+      </div>
+      <div class="flex flex-col w-full">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Title
+                            </th>
+                            {% if not request.user.is_organizer %}
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Organisation
+                            </th>
+                            {% endif %}
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Start Date
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            End Date
+                            </th>
+                            {% if request.user.role != 'project_manager' %}
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Project Manager
+                            </th>
+                            {% endif %}
+                            {% if request.user.role == 'project_manager' or request.user.is_organizer %}
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Burndown
+                            </th>
+                            {% endif %}
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Progress
+                            </th>
+                            <th scope="col" class="relative px-6 py-3">
+                            <span class="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in projects %}
+                            {% if project.archive != True %}
+                            <tr class="bg-white">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <a class="text-blue-500 hover:text-blue-800" href="{% url 'dashboard:project-detail' project.pk %}">{{ project.title }}</a>
+                                </td>
+                                {% if not request.user.is_organizer %}
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ project.organisation }}
+                                </td>
+                                {% endif %}
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ project.start_date }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ project.end_date }}
+                                </td>
+                                {% if request.user.role != 'project_manager' %}
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ project.project_manager }}
+                                </td>
+                                 {% endif %}
+                                {% if request.user.role == 'project_manager' or request.user.is_organizer %}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                                        <a href="{% url 'dashboard:burndown-chart' project.pk %}">
+                                            <svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20 20H4V4" stroke="gray" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                <path d="M4 7L12 15L15 12L19.5 16.5" stroke="gray" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                </td>
+                                {% endif %}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-stone-50" style="background-color:{{ project.color_code }};">
+                                            {{ project.get_progress_display }}
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    {% if request.user.role == 'project_manager' %}
+                                    <a href="{% url 'dashboard:project-update' project.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                                        Edit
+                                    </a> /
+                                    <a class="text-indigo-600 hover:text-indigo-900" href="{% url 'dashboard:project-management' project.pk %}">
+                                        Manage
+                                    </a>
+                                    {% elif request.user.is_organizer %}
+                                    <a href="{% url 'dashboard:project-update' project.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                                        Edit
+                                    </a>
+                                    {% elif request.user.role == 'tester' %}
+                                    <a href="{% url 'dashboard:project-test' project.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                                        Test
+                                    </a>
+                                        {% else %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% empty %}
+
+                        <p class="pl-2">There are currently no projects</p>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container px-5 mx-auto">
+    <div class="flex flex-wrap -m-4 justify-center">
+        <div>
+            <canvas id="statusChart" width="400" height="400"></canvas>
+        </div>
+        <div>
+            <canvas id="priorityChart" width="400" height="400"></canvas>
+        </div>
+        <div>
+            <canvas id="typeChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+    </div>
+
+</body>
+</html>

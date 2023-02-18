@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+
+{% block content %}
+
+<div class="max-w-lg mx-auto">
+    <a class="hover:text-blue-400" href="{% url 'dashboard:management-ticket-detail' object.ticket.pk %}">Go back to ticket</a>
+    <hr/>
+    <div class="py-5 border-t border-gray-200">
+        <h1 class="text-4xl text-gray-800">Update this comment</h1>
+    </div>
+    <form method="post" class="mt-5" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="div_id_notes" class="mb-3"> <label for="id_notes" class="block text-gray-700 text-sm font-bold mb-2">
+            Notes<span class="asteriskField">*</span> </label>
+            <textarea name="notes" cols="40" rows="10" class="textarea block rounded-lg focus:outline-none leading-normal text-gray-700 appearance-none px-4 border bg-white py-2 w-full border-gray-300" required id="id_notes">{{ comment.notes }}</textarea>
+        </div>
+        <div id="div_id_file" class="mb-3">
+            <label for="id_file" class="block text-gray-700 text-sm font-bold mb-2">
+            File
+            </label>
+
+            {% if comment.file %}Currently: <a href="{{ comment.file.url }}">ticket_{{comment.ticket.pk}}/{{comment.file}}</a>
+            <p><input type="checkbox" name="file-clear" id="file-clear_id">
+            <label for="file-clear_id">Clear</label><br>{% endif %}</p>
+
+            <input type="file" name="file" class="clearablefileinput
+            text-sm text-grey-500 mt-2
+            file:mr-5 file:py-2 file:px-6
+            file:rounded-full file:border-0
+            file:text-sm file:font-medium
+            file:bg-blue-100 file:text-blue-700
+            hover:file:cursor-pointer" id="id_file">
+        </div>
+        <button type='submit' class="w-full text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-2 rounded-md">
+            Submit
+        </button>
+    </form>
+    <div class="mt-5 pt-5 border-t border-gray-200">
+        <a href="{% url 'dashboard:management-comment-delete' object.pk %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+            Delete
+        </a>
+    </div>
+</div>
+
+{% endblock content %}

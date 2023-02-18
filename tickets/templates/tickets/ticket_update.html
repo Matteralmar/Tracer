@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+
+{% block scripts %}
+    <script>
+        {% if request.user.role != 'developer' %}
+        $(document).ready(function () {
+            var chk = 0
+            $('#id_assigned_to').on('change', function (e) {
+                if (chk === 1 || chk === 0) {
+                    e.preventDefault();
+                    var data_for_backend = {};
+                    data_for_backend.csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+                    data_for_backend.filter = $('option:selected', '#id_assigned_to').val();
+                    data_for_backend.name = 'assigned_to'
+                    var url = "{% url 'tickets:ticket-filter' %}"
+                    if (data_for_backend.filter === '') {
+                        chk = 0
+                    }
+                    else {
+                        chk = 1
+                    }
+                    $.post(url, data_for_backend, function (response) {
+                        var project = $('#id_project')
+                        project.empty()
+                        var newProjectList = response.projects
+                        console.log(chk)
+                        if (response.projects.length === 0) {
+                            project.append('<option value selected>---------</option>')
+                        }else if (data_for_backend.filter === '') {
+                            project.append('<option value selected>---------</option>')
+                            newProjectList.forEach(p => {
+                            project.append('<option value=' + p.id + '>' + p.title + '</option>')
+                            })
+                        } else {
+                            newProjectList.forEach(p => {
+                            project.append('<option value=' + p.id + '>' + p.title + '</option>')
+                        })
+                       }
+
+                    })
+                }
+
+            })
+            $('#id_project').on('change', function (e) {
+                console.log(chk)
+                if (chk === 2 || chk ===0) {
+                    e.preventDefault();
+                    var data_for_backend = {};
+                    data_for_backend.csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+                    data_for_backend.filter = $('option:selected', '#id_project').val();
+                    data_for_backend.name = 'project'
+                    var url = "{% url 'tickets:ticket-filter' %}"
+                    if (data_for_backend.filter === '') {
+                        chk = 0
+                    }
+                    else {
+                        chk = 2
+                    }
+                    $.post(url, data_for_backend, function (response) {
+                        var assigned_to = $('#id_assigned_to')
+                        assigned_to.empty()
+                        var newUsersList = response.users
+                        console.log(response.users)
+                        if (response.users.length === 0) {
+                            assigned_to.append('<option value selected>---------</option>')
+                        }else {
+                            assigned_to.append('<option value selected>---------</option>')
+                            newUsersList.forEach(p => {
+                            assigned_to.append('<option value=' + p.member + '>' + p.username + '</option>')
+                            })
+                        }
+
+                    })
+               }
+            })
+        });
+        {% endif %}
+    </script>
+{% endblock scripts %}
+
+{% block content %}
+
+<section class="text-gray-600 body-font overflow-hidden">
+  <div class="container mx-auto">
+    <div class="lg:w-4/5 mx-auto flex flex-wrap">
+      <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 max-w-lg mx-auto">
+        <h2 class="text-sm title-font text-gray-500 tracking-widest">TICKET</h2>
+        <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">{{ ticket.title }}</h1>
+        <div class="flex mb-4">
+          <a href="{% url 'tickets:ticket-detail' ticket.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
+              Overview
+          </a>
+            {% if request.user.is_organizer %}
+            <a href="{% url 'tickets:ticket-status-update' ticket.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
+                Category
+            </a>
+            {% endif %}
+          <a href="{% url 'tickets:ticket-update' ticket.pk %}" class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">
+              Update Details
+          </a>
+        </div>
+          <form method="post">
+            {% csrf_token %}
+          {% if request.user.is_organizer %}
+              {{ form.title|as_crispy_field }}
+              <div id="div_id_assigned_to" class="mb-3">
+                  <label for="id_assigned_to" class="block text-gray-700 text-sm font-bold mb-2">
+                        Assigned to
+                  </label>
+                  <div class="mb-3">
+                      <div class="relative">
+                        <select id="id_assigned_to" class="bg-white focus:outline-none border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal text-gray-700" name="assigned_to" >
+                            {% for user in form.assigned_to %}
+                                    {{ user }}
+                                {% endfor %}
+                        </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+              <div id="div_id_project" class="mb-3">
+                  <label for="id_project" class="block text-gray-700 text-sm font-bold mb-2">
+                        Project<span class="asteriskField">*</span>
+                  </label>
+                  <div class="mb-3">
+                      <div class="relative">
+                        <select id="id_project" class="bg-white focus:outline-none border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal text-gray-700" name="project" >
+                            {% for project in form.project %}
+                                {{ project }}
+                                {% endfor %}
+                        </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+              {{ form.deadline|as_crispy_field }}
+          {% endif %}
+              {{ form.description|as_crispy_field }}
+              {% if not request.user.is_organizer %}{{ form.status|as_crispy_field }}{% endif %}
+              {% if request.user.is_organizer %}{{ form.score|as_crispy_field }}{% endif %}
+            <button type="submit" class="w-full text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-2 rounded-md">Submit</button>
+          </form>
+      {% if request.user.is_organizer %}
+        <div class="mt-5 py-5 border-t border-gray-200">
+          <a href="{% url 'tickets:ticket-delete' ticket.pk %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+              Delete
+            </a>
+            {% if ticket.completed %}
+                <a href="{% url 'tickets:ticket-reopen' ticket.pk %}" class="w-1/2 mt-3 text-white bg-blue-300 border-0 py-2 px-6 ml-2 focus:outline-none hover:bg-blue-400 rounded">
+                    Reopen
+                </a>
+            {% else %}
+                <a href="{% url 'tickets:ticket-completed' ticket.pk %}" class="w-1/2 mt-3 text-white bg-blue-300 border-0 py-2 px-6 ml-2 focus:outline-none hover:bg-blue-400 rounded">
+                    Complete
+                </a>
+            {% endif %}
+        </div>
+          {% else %}
+      <div class="mt-5 py-5 border-t border-gray-200">
+          <a href="{% url 'tickets:ticket-request-change' ticket.pk %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+              Request change
+            </a>
+        </div>
+      {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

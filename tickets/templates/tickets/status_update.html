@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <a class="hover:text-blue-400" href="{% url 'tickets:status-list' %}">Go back to statuses</a>
+    <hr/>
+    <div class="py-5 border-5 border-gray-200">
+        <h1 class="text-4xl test-gray-800">Update {{ object.name }}</h1>
+    </div>
+    <form method="post" class="mt-5">
+        {% csrf_token %}
+        <div id="div_id_name" class="mb-1">
+            <label for="id_name" class="block text-gray-700 text-sm font-bold mb-2">
+                Name<span class="asteriskField">*</span>
+            </label>
+            <input type="text" name="name" value="{{ status.name }}" maxlength="30" class="textinput border appearance-none leading-normal bg-white py-2 border-gray-300 rounded-lg w-full focus:outline-none px-4 block text-gray-700" required id="id_name">
+        </div>
+        <input type="color" class="form-control form-control-color" name="CI" id="exampleColorInput" value="{{ status.color_code }}" title="Choose your color">
+        <div id="div_id_test_status" class="mb-3">
+            <label for="id_test_status" class="block text-gray-700 text-sm font-bold mb-2">
+            Test status
+            </label>
+            {% if status.test_status %}
+                <input type="checkbox" name="test_status" class="checkboxinput " id="id_test_status" checked>
+            {% else %}
+                <input type="checkbox" name="test_status" class="checkboxinput " id="id_test_status">
+            {% endif %}
+        </div>
+        <button type="submit" class="w-full text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-2 rounded-md">
+            Submit
+        </button>
+    </form>
+    <div class="mt-5 py-5 border-t border-gray-200">
+          <a href="{% url 'tickets:status-delete' status.pk %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+              Delete
+          </a>
+    </div>
+</div>
+{% endblock content %}
