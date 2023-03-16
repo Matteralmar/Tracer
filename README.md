@@ -1,4 +1,4 @@
-# Tracer bachelor's thesis project made by Georgiy Vasyliev
+# Tracer bachelor thesis project made by Georgiy Vasyliev
 
 Django build bug-tracking system
 
