@@ -1,4 +1,4 @@
-# Tracer bachelor thesis project made by Georgiy Vasyliev
+# Tracer project made by Georgiy Vasyliev
 
 Django build bug-tracking system
 
@@ -17,3 +17,4 @@ To run this project locally you will need to set your environment variables
 7. Make migrations by running `python manage.py migrate` in your terminal
 8. Run `export READ_DOT_ENV_FILE=True` inside your terminal so that your environment variables file will be read
 9. Run server using `python manage.py runserver` command
+
