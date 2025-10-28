@@ -8,7 +8,7 @@ Django build bug-tracking system
 
 To run this project locally you will need to set your environment variables
 
-1. Create a virtual environment inside the project by running `virtualenv venv` or other commands in your terminal(if pip not installed or not updated then install it or update it)
+1. Create a virtual environment inside the project by running `virtualenv venv` or other commands in your terminal
 3. Activate venv using `source venv/bin/activate`
 4. Install all the needed packages from "requirements.txt"
 5. If some requirements are not installed, install them using `pip install <requirment>`
@@ -16,6 +16,7 @@ To run this project locally you will need to set your environment variables
 7. Change DATABASES field in the same file to: DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': 'mydatabase',}}
 8. Make migrations by running `python manage.py migrate` in your terminal
 9. Run server using `python manage.py runserver` command
+
 
 
 
