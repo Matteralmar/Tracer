@@ -16,6 +16,8 @@ To run this project locally you will need to set your environment variables
 7. Change DATABASES field in the same file to: DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': 'mydatabase',}}
 8. Make migrations by running `python manage.py migrate` in your terminal
 9. Run server using `python manage.py runserver` command
+10. Copy http://127.0.0.1:8000/ into your browser and enjoy the run!
+
 
 
 
