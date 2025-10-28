@@ -13,9 +13,10 @@ To run this project locally you will need to set your environment variables
 3. Install all the needed packages from "requirements.txt"
 4. If some requirements are not installed, install them using `pip install <requirment>`
 5. Add generated secret key into SECRET_KEY field in bugTrack/settings.py. Generate it using `python -c "import secrets; print(secrets.token_urlsafe(50))"`
-6. Change DATABASES field in the same file to DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': 'mydatabase',}}
+6. Change DATABASES field in the same file to: DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': 'mydatabase',}}
 7. Make migrations by running `python manage.py migrate` in your terminal
 8. Run server using `python manage.py runserver` command
+
 
 
 
