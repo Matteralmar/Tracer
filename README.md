@@ -15,8 +15,10 @@ To run this project locally you will need to set your environment variables
 6. Add generated secret key into SECRET_KEY field in bugTrack/settings.py. Generate it using `python -c "import secrets; print(secrets.token_urlsafe(50))"`
 7. Change DATABASES field in the same file to: DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': 'mydatabase',}}
 8. Make migrations by running `python manage.py migrate` in your terminal
-9. Run server using `python manage.py runserver` command
-10. Press http://127.0.0.1:8000/ and enjoy the run!
+9. Collect static files for icon and image `python3 manage.py collectstatic`
+10. Run server using `python manage.py runserver` command
+11. Press http://127.0.0.1:8000/ and enjoy the run!
+
 
 
 
